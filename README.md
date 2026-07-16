@@ -4,6 +4,12 @@ Foundry VTT module for Pokemon Tabletop Reunited: Evolved.
 
 This module expands PTR2e weapon gear previews in the Compendium Browser and item hover embeds.
 
+## Installation
+
+Paste this manifest URL into Foundry's **Install Module** dialog:
+
+`https://raw.githubusercontent.com/Umbura/ptr2e-gear-description-expansion/main/module.json`
+
 ## Features
 
 - Shows weapon action names in weapon gear previews.
