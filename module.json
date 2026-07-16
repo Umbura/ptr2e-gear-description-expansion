@@ -2,7 +2,7 @@
   "id": "ptr2e-gear-description-expansion",
   "title": "PTR2e Gear Description Expansion",
   "description": "Expands PTR2e weapon gear previews with weapon actions, offensive stats, numeric modifiers, and a Carry Slot filter fix.",
-  "version": "1.2.0",
+  "version": "1.2.1",
   "authors": [
     {
       "name": "PTR2e Module Extensions"
@@ -26,5 +26,9 @@
   "styles": [
     "styles/gear-description.css"
   ],
-  "url": "https://github.com/Umbura/ptr2e-gear-description-expansion"
+  "url": "https://github.com/Umbura/ptr2e-gear-description-expansion",
+  "bugs": "https://github.com/Umbura/ptr2e-gear-description-expansion/issues",
+  "readme": "https://github.com/Umbura/ptr2e-gear-description-expansion#readme",
+  "manifest": "https://raw.githubusercontent.com/Umbura/ptr2e-gear-description-expansion/main/module.json",
+  "download": "https://github.com/Umbura/ptr2e-gear-description-expansion/archive/refs/heads/main.zip"
 }
