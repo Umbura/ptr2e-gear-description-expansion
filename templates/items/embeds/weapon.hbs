@@ -1,0 +1,117 @@
+﻿<figure>
+    <header class="header">
+        <h2 class="rarity-{{document.system.rarity}}">{{document.name}}</h2>
+    </header>
+    {{#if traits}}
+    <header class="traits">
+        <input type="text" class="traits ptr2e-tagify" value="{{json traits}}" data-dType="JSON" readonly/>
+    </header>
+    {{/if}}
+    <content class="item-embed">
+        <section class="details">
+            <fieldset>
+                <legend>
+                    Current State
+                </legend>
+                <label for="quantity">{{localize fields.quantity.label}}</label> <span>{{document.system.quantity}}</span>
+                <label for="equipped.carryType">{{localize fields.equipped.fields.carryType.label}}</label> <span>{{document.system.equipped.carryType}}</span>
+                {{#if document.system.equipped.handsHeld}}<label for="equipped.handsHeld">{{localize fields.equipped.fields.handsHeld.label}}</label> <span>{{document.system.equipped.handsHeld}}</span>{{/if}}
+            </fieldset>
+            <fieldset>
+                <legend>
+                    Quality & Value
+                </legend>
+                <label for="grade">{{localize fields.grade.label}}</label> <span>{{document.system.grade}}</span>
+                <label for="rarity">{{localize fields.rarity.label}}</label> <span>{{document.system.rarity}}</span>
+            </fieldset>
+            {{#if document.system.actions}}
+            <div class="ptr2e-gear-description-expansion-block">
+                <div class="ptr2e-gear-description-expansion-title">
+                    Weapon Actions
+                </div>
+                <div class="ptr2e-gear-description-expansion-action-list">
+                {{#each document.system.actions as |weaponAction|}}
+                    {{#if (eq weaponAction.type "attack")}}
+                    <div class="ptr2e-gear-description-expansion-action-row">
+                        <div class="ptr2e-gear-description-expansion-action-main">
+                            <span class="ptr2e-gear-description-expansion-action-name">{{weaponAction.name}}</span>
+                            <span class="ptr2e-gear-description-expansion-action-role">
+                                {{#if weaponAction.offensiveStat}}
+                                    {{#if (eq weaponAction.offensiveStat "spa")}}SP. ATK{{else if (eq weaponAction.offensiveStat "spatk")}}SP. ATK{{else if (eq weaponAction.offensiveStat "atk")}}ATK{{else}}{{formatSlug weaponAction.offensiveStat}}{{/if}}
+                                {{else if (eq weaponAction.category "physical")}}
+                                    ATK
+                                {{else if (eq weaponAction.category "special")}}
+                                    SP. ATK
+                                {{else}}
+                                    {{formatSlug weaponAction.category}}
+                                {{/if}}
+                            </span>
+                        </div>
+                        <div class="ptr2e-gear-description-expansion-action-stats">
+                            {{#if weaponAction.power}}<span class="ptr2e-gear-description-expansion-pill">Pow {{weaponAction.power}}</span>{{/if}}
+                            {{#if weaponAction.accuracy}}<span class="ptr2e-gear-description-expansion-pill">Acc {{weaponAction.accuracy}}</span>{{/if}}
+                            {{#if weaponAction.range.distance}}<span class="ptr2e-gear-description-expansion-pill">{{weaponAction.range.distance}}{{#if weaponAction.range.unit}} {{weaponAction.range.unit}}{{/if}}</span>{{else if (eq weaponAction.range.target "self")}}<span class="ptr2e-gear-description-expansion-pill">Self</span>{{/if}}
+                            {{#if weaponAction.cost.powerPoints}}<span class="ptr2e-gear-description-expansion-pill">PP {{weaponAction.cost.powerPoints}}</span>{{/if}}
+                        </div>
+                    </div>
+                    {{/if}}
+                {{/each}}
+                </div>
+            </div>
+            {{/if}}
+            {{#if document.effects.contents}}
+            <div class="ptr2e-gear-description-expansion-block">
+                <div class="ptr2e-gear-description-expansion-title">
+                    Numeric Modifiers
+                </div>
+                <div class="ptr2e-gear-description-expansion-modifier-list">
+                {{#each document.effects.contents as |effect|}}
+                    {{#each effect.system.changes as |change|}}
+                        {{#if (or (eq change.type "flat-modifier") (eq change.type "basic") (eq change.type "percentile-modifier") (eq change.type "alter-attack"))}}
+                        <div class="ptr2e-gear-description-expansion-modifier-row">
+                            <span class="ptr2e-gear-description-expansion-modifier-name">
+                                {{#if (eq change.key "{item|id}-attack-damage-flat")}}
+                                    Damage
+                                {{else if change.label}}
+                                    {{change.label}}
+                                {{else}}
+                                    {{change.key}}
+                                {{/if}}
+                            </span>
+                            <span class="ptr2e-gear-description-expansion-modifier-value">{{numberFormat change.value decimals=0 sign=true}}</span>
+                        </div>
+                        {{/if}}
+                    {{/each}}
+                {{/each}}
+                </div>
+            </div>
+            {{/if}}
+            <fieldset>
+                <legend>
+                    Crafting
+                </legend>
+                <label for="crafting.skill">{{localize fields.crafting.fields.skill.label}}</label> <span>{{document.system.crafting.skill}}</span>
+                <label for="crafting.spans">{{localize fields.crafting.fields.spans.label}}</label> <span>{{document.system.crafting.spans}}</span>
+                <label for="crafting.materials">{{localize fields.crafting.fields.materials.label}}</label> <span>{{#each document.system.crafting.materials}}{{this}}{{#unless @last}}, {{/unless}}{{/each}}</span>
+            </fieldset>
+        </section>
+        <section class="item-description">
+            <fieldset>
+                <legend>Effect Description</legend>
+                {{#if document.system.description}}
+                <article>
+                    {{{document.system.description}}}
+                </article>
+                {{else}}
+                <article class="center">
+                    <small><i>No Effect Description Provided</i></small>
+                </article>
+                {{/if}}
+            </fieldset>
+        </section>
+    </content>
+    {{#each actions}}
+      {{> action-embed action=action}}
+    {{/each}}
+</figure>
+

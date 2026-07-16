@@ -1,0 +1,144 @@
+﻿.item-embed .details > .ptr2e-gear-description-expansion-block,
+.item-embed .ptr2e-gear-description-expansion-block {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 6px !important;
+  grid-column: 1 / -1 !important;
+  width: 100% !important;
+  height: auto !important;
+  min-height: 0 !important;
+  max-height: none !important;
+  box-sizing: border-box !important;
+  margin: 0 !important;
+  padding: 7px 9px 8px !important;
+  border: 1px solid var(--border-theme-color, #a36b9f) !important;
+  border-radius: 6px !important;
+  overflow: visible !important;
+}
+
+.item-embed .ptr2e-gear-description-expansion-title {
+  display: block !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  color: var(--appv2-text-color, #f5f5f5) !important;
+  font-size: 12px !important;
+  font-weight: 800 !important;
+  line-height: 1.1 !important;
+  text-align: left !important;
+}
+
+.item-embed .ptr2e-gear-description-expansion-block:has(.ptr2e-gear-description-expansion-action-list:not(:has(.ptr2e-gear-description-expansion-action-row))),
+.item-embed .ptr2e-gear-description-expansion-block:has(.ptr2e-gear-description-expansion-modifier-list:not(:has(.ptr2e-gear-description-expansion-modifier-row))) {
+  display: none !important;
+}
+
+.item-embed .ptr2e-gear-description-expansion-action-list,
+.item-embed .ptr2e-gear-description-expansion-modifier-list {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 5px !important;
+  width: 100% !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+.item-embed .ptr2e-gear-description-expansion-action-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) !important;
+  gap: 4px !important;
+  min-width: 0 !important;
+  padding: 0 0 6px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.14) !important;
+}
+
+.item-embed .ptr2e-gear-description-expansion-action-row:last-child,
+.item-embed .ptr2e-gear-description-expansion-modifier-row:last-child {
+  padding-bottom: 0 !important;
+  border-bottom: 0 !important;
+}
+
+.item-embed .ptr2e-gear-description-expansion-action-main {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: center !important;
+  gap: 8px !important;
+  min-width: 0 !important;
+}
+
+.item-embed .ptr2e-gear-description-expansion-action-name {
+  display: block !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  font-weight: 700 !important;
+  line-height: 1.15 !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.item-embed .ptr2e-gear-description-expansion-action-role {
+  display: inline-flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  min-width: max-content !important;
+  padding: 1px 5px !important;
+  border: 1px solid rgba(122, 232, 224, 0.7) !important;
+  border-radius: 3px !important;
+  background: rgba(122, 232, 224, 0.13) !important;
+  color: #aef4ee !important;
+  font-size: 10px !important;
+  font-weight: 800 !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+}
+
+.item-embed .ptr2e-gear-description-expansion-action-stats {
+  display: flex !important;
+  flex-wrap: wrap !important;
+  gap: 3px !important;
+  min-width: 0 !important;
+  margin: 0 !important;
+}
+
+.item-embed .ptr2e-gear-description-expansion-pill {
+  display: inline-flex !important;
+  align-items: center !important;
+  min-width: 0 !important;
+  max-width: 100% !important;
+  padding: 1px 4px !important;
+  border: 1px solid rgba(255, 255, 255, 0.28) !important;
+  border-radius: 3px !important;
+  background: rgba(255, 255, 255, 0.08) !important;
+  font-size: 10px !important;
+  font-weight: 700 !important;
+  line-height: 1.2 !important;
+  white-space: nowrap !important;
+}
+
+.item-embed .ptr2e-gear-description-expansion-modifier-row {
+  display: grid !important;
+  grid-template-columns: minmax(0, 1fr) auto !important;
+  align-items: baseline !important;
+  column-gap: 8px !important;
+  min-width: 0 !important;
+  padding: 0 0 4px !important;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.12) !important;
+}
+
+.item-embed .ptr2e-gear-description-expansion-modifier-name {
+  display: block !important;
+  min-width: 0 !important;
+  overflow: hidden !important;
+  font-weight: 600 !important;
+  line-height: 1.15 !important;
+  text-overflow: ellipsis !important;
+  white-space: nowrap !important;
+}
+
+.item-embed .ptr2e-gear-description-expansion-modifier-value {
+  font-weight: 800 !important;
+  line-height: 1.15 !important;
+  text-align: right !important;
+  white-space: nowrap !important;
+}
+
