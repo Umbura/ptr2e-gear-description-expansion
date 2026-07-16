@@ -1,5 +1,7 @@
-﻿const MODULE_ID = "ptr2e-gear-description-expansion";
+const MODULE_ID = "ptr2e-gear-description-expansion";
 const WEAPON_TYPE = "weapon";
+const PREVIEW_ITEM_TYPES = new Set(["weapon", "gear", "equipment"]);
+const WORN_SLOT = "worn";
 const ROW_SELECTOR = "#compendium-browser li.item[data-entry-uuid]";
 const CARRY_SLOT_FILTER_PATCHED = Symbol.for(`${MODULE_ID}.carrySlotFilterPatched`);
 
@@ -23,7 +25,10 @@ const ATTRIBUTE_LABELS = Object.freeze({
   spatk: "SP. ATK",
   spd: "SP. DEF",
   spdef: "SP. DEF",
-  spe: "SPE"
+  spe: "SPE",
+  speed: "SPE",
+  res: "RES",
+  shield: "Shield"
 });
 
 const STAGE_LABELS = Object.freeze({
@@ -83,6 +88,11 @@ function collectWeaponActions(item) {
     }));
 }
 
+function isSupportedPreviewItem(item) {
+  if (!item || !PREVIEW_ITEM_TYPES.has(item.type)) return false;
+  return item.type === WEAPON_TYPE || item.system?.equipped?.slot === WORN_SLOT;
+}
+
 function getEnabledChanges(item) {
   return Array.from(item.effects ?? []).flatMap((effect) => {
     if (effect.disabled || effect.transfer === false) return [];
@@ -103,6 +113,12 @@ function describeChange(change) {
   const stage = /^system\.(?:attributes|battleStats)\.(atk|def|spa|spatk|spd|spdef|spe|speed|accuracy|evasion|crit)\.stage$/.exec(change.key);
   if (stage) return { label: STAGE_LABELS[stage[1]], value, suffix: "" };
 
+  const multiplier = /^system\.modifiers\.(hp|atk|def|spa|spatk|spd|spdef|spe|speed|res|shield)Multiplier$/.exec(change.key);
+  if (multiplier) return { label: `${ATTRIBUTE_LABELS[multiplier[1]]} Multiplier`, value: value * 100, suffix: "%" };
+
+  const modifier = /^system\.modifiers\.(hp|atk|def|spa|spatk|spd|spdef|spe|speed|res|shield)$/.exec(change.key);
+  if (modifier) return { label: ATTRIBUTE_LABELS[modifier[1]], value, suffix: "" };
+
   if (change.key === "{item|id}-attack-damage-flat") {
     return { label: change.label || "Damage", value, suffix: "" };
   }
@@ -118,6 +134,10 @@ function describeChange(change) {
   if (change.type === "alter-attack" && ["power", "accuracy", "pp-cost"].includes(change.property)) {
     const labels = { power: "Power", accuracy: "Accuracy", "pp-cost": "PP Cost" };
     return { label: change.label || labels[change.property], value, suffix: "" };
+  }
+
+  if (change.label && ["basic", "flat-modifier", "percentile-modifier"].includes(change.type)) {
+    return { label: change.label, value, suffix: change.type === "percentile-modifier" ? "%" : "" };
   }
 
   return null;
@@ -229,13 +249,13 @@ function getDetailsElement(embed) {
 }
 
 function insertDetails(embed, item) {
-  if (!(embed instanceof HTMLElement) || !item || item.type !== WEAPON_TYPE) return false;
+  if (!(embed instanceof HTMLElement) || !isSupportedPreviewItem(item)) return false;
   if (embed.querySelector(".ptr2e-gear-description-expansion-block")) return true;
 
   const details = getDetailsElement(embed);
   if (!details) return false;
 
-  const actionsBlock = buildActionsBlock(collectWeaponActions(item));
+  const actionsBlock = item.type === WEAPON_TYPE ? buildActionsBlock(collectWeaponActions(item)) : null;
   const modifiersBlock = buildModifiersBlock(collectModifiers(item));
   const blocks = [actionsBlock, modifiersBlock].filter(Boolean);
   if (!blocks.length) return false;
@@ -286,7 +306,7 @@ async function injectPreviewDetails(embed) {
 
   try {
     const item = await fromUuid(uuid);
-    if (!item || item.type !== WEAPON_TYPE) {
+    if (!isSupportedPreviewItem(item)) {
       embed.dataset.ptr2eGearDescriptionExpansionState = "ignored";
       return;
     }
@@ -301,30 +321,36 @@ async function injectPreviewDetails(embed) {
   }
   catch (error) {
     embed.dataset.ptr2eGearDescriptionExpansionState = "error";
-    console.error(`${MODULE_ID} | Failed to inject weapon preview data for ${uuid}`, error);
+    console.error(`${MODULE_ID} | Failed to inject gear preview data for ${uuid}`, error);
   }
 }
 
-function patchWeaponEmbed() {
-  const prototype = CONFIG.Item?.dataModels?.weapon?.prototype;
-  if (!prototype?.toEmbed || prototype.toEmbed.ptr2eGearDescriptionExpansionPatched) return false;
+function patchItemEmbeds() {
+  const patchedTypes = [];
 
-  const original = prototype.toEmbed;
+  for (const type of PREVIEW_ITEM_TYPES) {
+    const prototype = CONFIG.Item?.dataModels?.[type]?.prototype;
+    if (!prototype?.toEmbed || prototype.toEmbed.ptr2eGearDescriptionExpansionPatched) continue;
 
-  async function toEmbedWithGearDescription(...args) {
-    const embed = await original.apply(this, args);
-    try {
-      insertDetails(embed, this.parent);
+    const original = prototype.toEmbed;
+
+    async function toEmbedWithGearDescription(...args) {
+      const embed = await original.apply(this, args);
+      try {
+        insertDetails(embed, this.parent);
+      }
+      catch (error) {
+        console.error(`${MODULE_ID} | Failed to add direct gear embed details`, error);
+      }
+      return embed;
     }
-    catch (error) {
-      console.error(`${MODULE_ID} | Failed to add direct weapon embed details`, error);
-    }
-    return embed;
+
+    toEmbedWithGearDescription.ptr2eGearDescriptionExpansionPatched = true;
+    prototype.toEmbed = toEmbedWithGearDescription;
+    patchedTypes.push(type);
   }
 
-  toEmbedWithGearDescription.ptr2eGearDescriptionExpansionPatched = true;
-  prototype.toEmbed = toEmbedWithGearDescription;
-  return true;
+  return patchedTypes;
 }
 
 function ensureCarrySlotOptions(gearTab) {
@@ -405,7 +431,7 @@ function scheduleInjection() {
 Hooks.once("ready", () => {
   if (game.system.id !== "ptr2e") return;
 
-  const patched = patchWeaponEmbed();
+  const patchedTypes = patchItemEmbeds();
   const carrySlotFilterPatched = patchCarrySlotFilter();
   const observer = new MutationObserver(scheduleInjection);
   observer.observe(document.body, { childList: true, subtree: true });
@@ -417,6 +443,6 @@ Hooks.once("ready", () => {
   }, true);
 
   scheduleInjection();
-  console.info(`${MODULE_ID} | Weapon gear preview details enabled.`, { patched, carrySlotFilterPatched });
+  console.info(`${MODULE_ID} | Gear preview details enabled.`, { patchedTypes, carrySlotFilterPatched });
 });
 

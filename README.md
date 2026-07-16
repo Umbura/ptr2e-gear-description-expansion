@@ -2,7 +2,9 @@
 
 Foundry VTT module for Pokemon Tabletop Reunited: Evolved.
 
-This module expands PTR2e weapon gear previews in the Compendium Browser and item hover embeds.
+This module expands PTR2e weapon and worn gear previews in the Compendium Browser and item hover embeds.
+
+![PTR2e Gear Description Expansion preview](docs/screenshot.png)
 
 ## Installation
 
@@ -16,6 +18,8 @@ Paste this manifest URL into Foundry's **Install Module** dialog:
 - Shows the offensive stat used by each weapon action: `ATK`, `SP. ATK`, or `Status`.
 - Shows action power, accuracy, range, and PP chips when available.
 - Shows numeric item modifiers from enabled item effects.
+- Shows numeric modifiers for worn gear such as armor.
+- Reads common armor modifier keys such as attribute multipliers and defensive modifiers.
 - Separates `ATK` and `SP. ATK` modifiers when both are present.
 - Displays flat damage modifiers as `Damage` instead of incorrectly labeling them as attack stat bonuses.
 - Injects the extra weapon preview blocks at runtime.
