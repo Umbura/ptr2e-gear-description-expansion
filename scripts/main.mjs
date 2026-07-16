@@ -157,25 +157,25 @@ function createBlock(title, className) {
 function buildActionsBlock(actions) {
   if (!actions.length) return null;
 
-  const { block, list } = createBlock("Weapon Actions", "ptr2e-gear-description-expansion-expansion-action-list");
+  const { block, list } = createBlock("Weapon Actions", "ptr2e-gear-description-expansion-action-list");
 
   for (const action of actions) {
     const row = document.createElement("div");
-    row.className = "ptr2e-gear-description-expansion-expansion-action-row";
+    row.className = "ptr2e-gear-description-expansion-action-row";
 
     const main = document.createElement("div");
-    main.className = "ptr2e-gear-description-expansion-expansion-action-main";
+    main.className = "ptr2e-gear-description-expansion-action-main";
 
     const name = document.createElement("span");
-    name.className = "ptr2e-gear-description-expansion-expansion-action-name";
+    name.className = "ptr2e-gear-description-expansion-action-name";
     name.textContent = action.name;
 
     const role = document.createElement("span");
-    role.className = "ptr2e-gear-description-expansion-expansion-action-role";
+    role.className = "ptr2e-gear-description-expansion-action-role";
     role.textContent = action.stat;
 
     const stats = document.createElement("div");
-    stats.className = "ptr2e-gear-description-expansion-expansion-action-stats";
+    stats.className = "ptr2e-gear-description-expansion-action-stats";
 
     const chips = [
       action.power === null ? null : `Pow ${action.power}`,
@@ -186,7 +186,7 @@ function buildActionsBlock(actions) {
 
     for (const chipText of chips) {
       const chip = document.createElement("span");
-      chip.className = "ptr2e-gear-description-expansion-expansion-pill";
+      chip.className = "ptr2e-gear-description-expansion-pill";
       chip.textContent = chipText;
       stats.append(chip);
     }
@@ -202,18 +202,18 @@ function buildActionsBlock(actions) {
 function buildModifiersBlock(modifiers) {
   if (!modifiers.length) return null;
 
-  const { block, list } = createBlock("Numeric Modifiers", "ptr2e-gear-description-expansion-expansion-modifier-list");
+  const { block, list } = createBlock("Numeric Modifiers", "ptr2e-gear-description-expansion-modifier-list");
 
   for (const modifier of modifiers) {
     const row = document.createElement("div");
-    row.className = "ptr2e-gear-description-expansion-expansion-modifier-row";
+    row.className = "ptr2e-gear-description-expansion-modifier-row";
 
     const name = document.createElement("span");
-    name.className = "ptr2e-gear-description-expansion-expansion-modifier-name";
+    name.className = "ptr2e-gear-description-expansion-modifier-name";
     name.textContent = modifier.label;
 
     const value = document.createElement("span");
-    value.className = "ptr2e-gear-description-expansion-expansion-modifier-value";
+    value.className = "ptr2e-gear-description-expansion-modifier-value";
     value.textContent = formatSigned(modifier.value, modifier.suffix);
 
     row.append(name, value);

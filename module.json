@@ -2,7 +2,7 @@
   "id": "ptr2e-gear-description-expansion",
   "title": "PTR2e Gear Description Expansion",
   "description": "Expands PTR2e weapon gear previews with weapon actions, offensive stats, numeric modifiers, and a Carry Slot filter fix.",
-  "version": "1.2.1",
+  "version": "1.2.2",
   "authors": [
     {
       "name": "PTR2e Module Extensions"
